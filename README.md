@@ -1,2 +1,2 @@
 # lire-server
-LIRE standalone http json server
+LIRE stand-alone http json server
