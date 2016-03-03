@@ -19,5 +19,6 @@ project/plugins/project/
 #intelij
 .idea
 
-#db
+#settings
 index
+config.scala

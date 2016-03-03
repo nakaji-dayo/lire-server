@@ -3,9 +3,10 @@ import java.io.{ByteArrayInputStream, File, FileInputStream}
 import java.nio.file.Paths
 import javax.imageio.ImageIO
 
+import config.ServerConfig
 import net.semanticmetadata.lire.builders.{DocumentBuilder, GlobalDocumentBuilder}
 import com.twitter.finagle.Http
-import com.twitter.util.Await
+import com.twitter.util.{Eval, Await}
 import io.finch._
 import net.semanticmetadata.lire.imageanalysis.features.global.{EdgeHistogram, JCD}
 import net.semanticmetadata.lire.searchers.GenericFastImageSearcher
@@ -46,8 +47,11 @@ object Main {
   val service = (hello :+: search).toService
 
   def main(args: Array[String]) {
-    indexing("./index", args(0))
-    Await.ready(Http.server.serve(":9090", service))
+    val config = Eval[ServerConfig](new java.io.File("config.scala"))
+    config.imagesDir.map(imagesDir => {
+      indexing(config.indexPath, imagesDir)
+    })
+    Await.ready(Http.server.serve(":" + config.port, service))
   }
 
   def indexing(indexDir: String, imageDir: String): Unit = {

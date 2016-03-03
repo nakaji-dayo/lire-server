@@ -1,0 +1,8 @@
+import config.ServerConfig
+
+new ServerConfig {
+  val port = 9090
+  val indexPath = "./index"
+  val imagesDir = None
+}
+
